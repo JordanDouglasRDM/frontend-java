@@ -2,6 +2,7 @@
 import ContainerBox from "../components/ContainerBox.vue";
 import Navbar from "../components/Navbar.vue";
 import Swal from "sweetalert2";
+import {axios} from "../main.js";
 
 export default {
   name: "Register",
@@ -27,16 +28,15 @@ export default {
         const form = new FormData(document.getElementById("form-store"));
         const newUser = {
           username: form.get("username"),
-          email: form.get("email"),
           password: form.get("password"),
-          cep: form.get("cep"),
+          email: form.get("email"),
+          cep: form.get("cep")
         }
 
-        console.log(newUser)
-        // const response = await axios.post("/register", credenptials);
-        // if (response.data.status !== 201) {
-        //   throw new Error('Houve um erro ao cadastrar um novo usuário. Entre em contato com o adm do sistema.')
-        // }
+        const response = await axios.post("/user/register", newUser);
+        if (response.data.status !== 201) {
+          throw new Error('Houve um erro ao cadastrar um novo usuário. Entre em contato com o adm do sistema.')
+        }
         this.toast.fire({
           icon: "success",
           title: "Usuário cadastrado com sucesso",
@@ -55,7 +55,6 @@ export default {
 </script>
 
 <template>
-  <Navbar/>
   <ContainerBox>
     <h2 class="text text-center">Registre-se</h2>
     <form id="form-store" class="w-100 d-flex flex-column gap-4">

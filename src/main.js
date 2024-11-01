@@ -13,4 +13,6 @@ app.use(router);
 
 app.mount('#app');
 
+axios.defaults.baseURL = 'http://localhost:8080/api';
+
 export { axios };

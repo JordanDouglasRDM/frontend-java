@@ -29,13 +29,16 @@
         <td> {{ formatAddressCity(user.address) }}</td>
         <td>
           <div class="btn-group">
-            <button type="button" class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+            <button type="button" class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown"
+                    aria-expanded="false">
               Ação
             </button>
             <ul class="dropdown-menu">
               <li><a class="dropdown-item " data-bs-toggle="modal" data-bs-target="#exampleModal"
                      @click="handleEditUser(user)">Editar Senha</a></li>
-              <li v-if="false"><a class="dropdown-item bg-danger text-bg-danger" @click="handleDeleteUser(user)">Excluir</a></li>
+              <li v-if="false"><a class="dropdown-item bg-danger text-bg-danger"
+                                  @click="handleDeleteUser(user)">Excluir</a>
+              </li>
             </ul>
           </div>
         </td>
@@ -51,17 +54,15 @@ import Swal from "sweetalert2";
 import {axios} from "../main.js";
 import ModalEditUser from "../components/ModalEditUser.vue";
 import Navbar from "../components/Navbar.vue";
-// import ModalEditUser from "../components/ModalEditUser.vue";
-// import {Modal} from 'bootstrap';
+import dados from "/src/Pages/user-data.json";
 
 
 export default {
   name: "Users",
   components: {Navbar, ModalEditUser},
-  // components: {ModalEditUser},
   data() {
     return {
-      users: {},
+      users: dados,
       toast: Swal.mixin({
         toast: true,
         position: "top-end",
@@ -75,11 +76,13 @@ export default {
       }),
       user: {},
       modal: '',
-      loading: false,
+      loading: false
     };
   },
   async mounted() {
-    await this.canAccess();
+    if (!localStorage.getItem("token")) {
+      this.$router.push('/');
+    }
     this.loading = true;
     this.toast.fire({
       icon: "info",
@@ -93,8 +96,9 @@ export default {
     async getUsers() {
       try {
         this.loading = true;
-        const response = await axios.get('/src/Pages/user-data.json');
-        return response.data;
+        //const response = await axios.get('/src/Pages/user-data.json');
+        //return response.data;
+        return dados;
       } catch (error) {
         await this.toast.fire({
           icon: "error",
@@ -135,19 +139,6 @@ export default {
         }
       });
     },
-    async canAccess() {
-      if (localStorage.getItem("token")) {
-        return true;
-      }
-      this.loading = true;
-      await this.toast.fire({
-        icon: "error",
-        title: "Usuário não autenticado",
-        text: "Faça login primeiro para acessar esta página!",
-        timer: 2500
-      });
-      window.location.href = "/";
-    }
   }
 };
 </script>

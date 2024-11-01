@@ -1,5 +1,4 @@
 <template>
-  <Navbar />
   <ContainerBox>
     <h2 class="text text-center">Autenticação com Java e JWT</h2>
     <form id="form-login" class="w-100 d-flex flex-column gap-4" method="post" action="/">
@@ -10,6 +9,7 @@
       <div class="mb-4">
         <label for="password" class="form-label">Senha:</label>
         <input type="password" class="form-control" id="password" name="password" required>
+        <router-link class="link" to="/register">Não possui cadastro? Registre-se agora.</router-link>
       </div>
       <div class="d-flex justify-content-between">
         <button type="submit" @click.prevent="login" class="btn btn-primary w-100">Login</button>
@@ -31,9 +31,6 @@ import Swal from "sweetalert2";
 export default {
   name: "Login",
   components: {Navbar, ContainerBox},
-  mounted() {
-    this.logout()
-  },
   data() {
     return {
       toast: Swal.mixin({
@@ -58,15 +55,16 @@ export default {
           password: form.get("password"),
         }
 
-        console.log(credenptials)
-        localStorage.setItem('token', '321asd6a5s4dasd1asd54asd-asd16as5d4asd-1dasd46asd-13216a4dav');
-        // const response = await axios.post("/login", credenptials);
+        //const response = await axios.post("/user/auth", credenptials);
+        //let value = response.data.token;
+        let value = '6a54sd654asd456as-aqsd165as1d-ads1a45sd-asdasdasd';
+        localStorage.setItem('token', value);
         this.toast.fire({
           icon: "success",
           title: "Login realizado com sucesso",
           timer: 2000
         });
-        return response.data;
+        await this.canAccess()
       } catch (error) {
         await this.toast.fire({
           icon: "error",
@@ -74,8 +72,17 @@ export default {
           text: error.message
         });
       }
-    }, logout() {
-      localStorage.removeItem('token');
+    },
+    async canAccess() {
+      if (localStorage.getItem("token")) {
+        this.$router.push('/users');
+      }
+      await this.toast.fire({
+        icon: "error",
+        title: "Usuário não autenticado",
+        text: "Tente novamente mais tarde.",
+        timer: 2500
+      });
     }
   }
 }

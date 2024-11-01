@@ -35,8 +35,7 @@ export default {
           newPassword: form.get("newPassword"),
         }
 
-        console.log(credenptials)
-        // const response = await axios.patch("/edit", credenptials);
+        const response = await axios.patch("/user/update/password", credenptials);
         this.toast.fire({
           icon: "success",
           title: "Senha atualizada com sucesso",
@@ -74,7 +73,7 @@ export default {
               <input type="password" class="form-control" id="oldPassword" name="password" required>
             </div>
             <div class="mb-4">
-              <label for="newPassword" class="form-label">Senha Atual:</label>
+              <label for="newPassword" class="form-label">Nova Senha:</label>
               <input type="password" class="form-control" id="newPassword" name="password" required>
             </div>
           </form>

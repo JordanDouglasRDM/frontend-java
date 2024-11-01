@@ -1,9 +1,11 @@
 <script>
 export default {
   name: "Navbar",
-  mounted() {
-    console.log("Component mounted.")
-    console.log(this.$route.name)
+  methods: {
+    logout() {
+      localStorage.removeItem('token');
+      this.$router.push('/');
+    }
   }
 }
 </script>
@@ -19,7 +21,7 @@ export default {
         </div>
       </div>
     </div>
-    <router-link class="nav-link me-4 rounded px-2 py-1 text-bg-danger" to="/">Sair</router-link>
+    <button class="btn btn-outline-danger" @click="logout">Sair</button>
   </nav>
 </template>
 
